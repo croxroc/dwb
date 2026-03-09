@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Character + Video Swap</title>
+
+<style>
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    font-family: system-ui, sans-serif;
+  }
+
+  body {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    color: #fff;
+    overflow: hidden;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 50% 50%;
+    height: 100vh;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  /* Character rail */
+  .rail-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .rail {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+    padding-bottom: 10px;
+    width: 100%;
+  }
+
+  .rail::-webkit-scrollbar { display: none; }
+
+  .character {
+    flex-shrink: 0;
+    width: 220px;
+    height: 300px;
+    scroll-snap-align: start;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .character:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+  }
+
+  .character img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
+    display: block;
+  }
+
+  /* Arrows */
+  .arrows {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+  }
+
+  .arrow:hover { background: rgba(255,255,255,0.4); }
+
+  /* Video placeholder */
+  .video-placeholder {
+    width: 100%;
+    max-width: 600px;
+    height: 340px;
+    background: #222;
+    border-radius: 16px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+
+  .video-placeholder video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Details panel */
+  .details {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+  }
+
+  .details h2 { font-size: 2.5rem; margin: 0 0 20px; }
+  .details p { font-size: 1.2rem; line-height: 1.6; max-width: 480px; }
+</style>
+</head>
+
+<body>
+
+<div class="layout">
+
+  <!-- LEFT: Character Rail + Arrows + Video -->
+  <div class="rail-container">
+    <!-- Character Rail -->
+    <div class="rail" id="rail">
+      <div class="character" data-id="0"><img src="/images/1.webp" alt="Character 1"></div>
+      <div class="character" data-id="1"><img src="/images/2.webp" alt="Character 2"></div>
+      <div class="character" data-id="2"><img src="/images/3.webp" alt="Character 3"></div>
+      <div class="character" data-id="3"><img src="/images/4.webp" alt="Character 4"></div>
+      <div class="character" data-id="4"><img src="/images/5.webp" alt="Character 5"></div>
+      <div class="character" data-id="5"><img src="/images/6.webp" alt="Character 6"></div>
+      <div class="character" data-id="6"><img src="/images/7.webp" alt="Character 7"></div>
+      <div class="character" data-id="7"><img src="/images/8.webp" alt="Character 8"></div>
+      <div class="character" data-id="8"><img src="/images/9.webp" alt="Character 9"></div>
+      <div class="character" data-id="9"><img src="/images/10.webp" alt="Character 10"></div>
+    </div>
+
+    <!-- Arrows -->
+    <div class="arrows">
+      <div class="arrow" id="left">&#8592;</div>
+      <div class="arrow" id="right">&#8594;</div>
+    </div>
+
+    <!-- Video placeholder -->
+    <div class="video-placeholder">
+      <video id="video" src="/videos/1.mp4" muted controls></video>
+    </div>
+  </div>
+
+  <!-- RIGHT: Details -->
+  <div class="details">
+    <h2 id="name">Character 1</h2>
+    <p id="bio">
+      This is the description for Character 1.
+    </p>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+  const rail = document.getElementById("rail");
+  const leftArrow = document.getElementById("left");
+  const rightArrow = document.getElementById("right");
+  const name = document.getElementById("name");
+  const bio = document.getElementById("bio");
+  const video = document.getElementById("video");
+
+  const data = [
+    { name: "Character 1", bio: "This is the description for Character 1.", video: "/videos/1.mp4" },
+    { name: "Character 2", bio: "This is the description for Character 2.", video: "/videos/2.mp4" },
+    { name: "Character 3", bio: "This is the description for Character 3.", video: "/videos/3.mp4" },
+    { name: "Character 4", bio: "This is the description for Character 4.", video: "/videos/4.mp4" },
+    { name: "Character 5", bio: "This is the description for Character 5.", video: "/videos/5.mp4" },
+    { name: "Character 6", bio: "This is the description for Character 6.", video: "/videos/6.mp4" },
+    { name: "Character 7", bio: "This is the description for Character 7.", video: "/videos/7.mp4" },
+    { name: "Character 8", bio: "This is the description for Character 8.", video: "/videos/8.mp4" },
+    { name: "Character 9", bio: "This is the description for Character 9.", video: "/videos/9.mp4" },
+    { name: "Character 10", bio: "This is the description for Character 10.", video: "/videos/10.mp4" }
+  ];
+
+  // Click character to update details and video
+  rail.addEventListener("click", e => {
+    const card = e.target.closest(".character");
+    if (!card) return;
+    const id = Number(card.dataset.id);
+
+    // Scroll clicked character into view
+    rail.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+
+    // Update details
+    name.textContent = data[id].name;
+    bio.textContent = data[id].bio;
+
+    // Swap video
+    video.pause();
+    video.src = data[id].video;
+    video.load();
+    video.play();
+  });
+
+  // Arrow scrolling
+  const scrollAmount = 250;
+  leftArrow.addEventListener("click", () => rail.scrollBy({ left: -scrollAmount, behavior: "smooth" }));
+  rightArrow.addEventListener("click", () => rail.scrollBy({ left: scrollAmount, behavior: "smooth" }));
+
+});
+</script>
+
+</body>
+</html>

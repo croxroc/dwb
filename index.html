@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="Author" content="Patrick John Evans">
+<meta name="Copyright" content="croxroc copyright from 2018, ownership of trademark 2022 and website content from concept 2018, to Patrick John Evans">
+<meta name="Description" content="Welcome to Deep Water Bend! Join CJ the Crocodile and friends in a world of Australian adventures. Discover original sing-along songs, storybooks, and fun for kids.">
+<meta property="og:title" content="croxroc® | Kids Music & Books" />
+<meta property="og:description" content="Join CJ the Crocodile at Deep Water Bend! Original Aussie songs, stories, and games for kids." />
+<meta property="og:image" content="https://croxroc.com/images/social-share-preview.jpg" />
+<meta property="og:url" content="https://croxroc.com" />
+<meta property="og:type" content="website" />
+
+<title>Croxroc® | Australian Children's Books, Music & Animated Characters</title>
+
+<style>
+  * { box-sizing: border-box; }
+
+  html, body {
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+    cursor: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* THE SCALER: This keeps the 1880x1000 stage perfectly proportional */
+  .stage {
+    position: relative;
+    width: 1880px;
+    height: 1000px;
+    background: #000;
+    transform-origin: center center;
+    flex-shrink: 0;
+    image-rendering: crisp-edges;
+  }
+
+  .grid {
+    display: grid;
+    /* Fixed pixel widths from your design to ensure the grid aligns with slices */
+    grid-template-columns: 77px 313px 433px 425px 203px 289px 81px 59px;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    inset: 0;
+  }
+
+  .col {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Overlap fixes: prevents hairline gaps between columns and images */
+  .col + .col {
+    margin-left: -1px;
+  }
+
+  img {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: auto;
+    image-rendering: crisp-edges;
+    vertical-align: middle;
+  }
+
+  .col img + img {
+    margin-top: -1px;
+  }
+
+  /* GLOW TRAIL */
+  .ribbon-dot {
+    position: fixed;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    filter: blur(6px);
+    animation: fade 0.8s linear forwards;
+    z-index: 9999;
+  }
+
+  @keyframes fade {
+    0% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(0.4); }
+  }
+
+  #cursorAnim {
+    position: fixed;
+    width: 96px;
+    height: 96px;
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    z-index: 999999;
+    background: url('images/icons/dusty.webp') no-repeat center / contain;
+    image-rendering: crisp-edges;
+  }
+</style>
+</head>
+
+<body>
+<div style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(1px, 1px, 1px, 1px);">
+    <h1>Croxroc: The Home of CJ the Crocodile and all his Friends</h1>
+    <h2>Australian Children's Books, Original Songs, and Animated Stories</h2>
+    <p>Welcome to Deep Water Bend. Join our crew for sing-alongs, coloring books, and educational games featuring Australian wildlife.</p>
+</div>
+
+<div id="cursorAnim"></div>
+
+<div class="stage" id="mainStage">
+  <div class="grid">
+
+    <div class="col">
+      <img src="images/slice1.webp" alt="">
+      <img src="images/slice2.webp" alt="">
+      <img src="images/slice3.webp" alt="">
+      <img src="images/slice4.webp" alt="">
+    </div>
+
+    <div class="col">
+      <img src="images/slice5.webp" alt="">
+      <img id="slice6" src="images/slice6.webp" fetchpriority="high" alt="Music">
+      <img id="slice7" src="images/slice7.webp" fetchpriority="high" alt="Games">
+      <img id="slice8" src="images/slice8.webp" fetchpriority="high" alt="Books">
+      <img id="slice9" src="images/slice9.webp" fetchpriority="high" alt="Characters">
+      <img src="images/slice10.webp" alt="">
+    </div>
+
+    <div class="col">
+      <img id="slice11" src="images/slice11.webp" alt="">
+      <img id="slice12" src="images/slice12.webp" alt="">
+      <img id="slice13" src="images/slice13.webp" alt="">
+      <img id="slice14" src="images/slice14.webp" alt="">
+      <img id="slice15" src="images/slice15.webp" alt="">
+      <img src="images/slice16.webp" alt="">
+    </div>
+
+    <div class="col">
+      <img src="images/slice17.webp" alt="">
+      <img id="slice18" src="images/slice18.webp" alt="">
+      <img id="slice19" src="images/slice19.webp" alt="">
+      <img id="slice20" src="images/slice20.webp" alt="">
+      <img src="images/slice21.webp" alt="">
+      <img src="images/slice22.webp" alt="">
+    </div>
+
+    <div class="col">
+      <img src="images/slice23.webp" alt="">
+      <img id="slice24" src="images/slice24.webp" alt="">
+      <img src="images/slice25.webp" alt="">
+      <img src="images/slice26.webp" alt="">
+      <img src="images/slice27.webp" alt="">
+      <img src="images/slice28.webp" alt="">
+      <img src="images/slice29.webp" alt="">
+    </div>
+
+    <div class="col">
+      <img src="images/slice30.webp" alt="">
+      <img src="images/slice31.webp" alt="">
+      <img id="slice32" src="images/slice32.webp" alt="">
+      <img src="images/slice33.webp" alt="">
+      <img src="images/slice34.webp" alt="">
+    </div>
+
+    <div class="col">
+      <img src="images/slice35.webp" alt="">
+      <img src="images/slice36.webp" alt="">
+      <img src="images/slice37.webp" alt="">
+      <img src="images/slice38.webp" alt="">
+      <img src="images/slice39.webp" alt="">
+      <img id="slice40" src="images/slice40.webp" alt="Contact">
+      <img src="images/slice41.webp" alt="">
+    </div>
+
+    <div class="col">
+      <img src="images/slice42.webp" alt="">
+      <img src="images/slice43.webp" alt="">
+      <img src="images/slice44.webp" alt="">
+      <img src="images/slice45.webp" alt="">
+      <img src="images/slice46.webp" alt="">
+      <img src="images/slice47.webp" alt="">
+      <img src="images/slice48.webp" alt="">
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* ---------- AUTO-SCALING LOGIC ---------- */
+  const stage = document.getElementById('mainStage');
+  const baseWidth = 1880;
+  const baseHeight = 1000;
+
+  function handleResize() {
+    const winW = window.innerWidth;
+    const winH = window.innerHeight;
+    const scale = Math.min(winW / baseWidth, winH / baseHeight);
+    stage.style.transform = `scale(${scale})`;
+  }
+
+  window.addEventListener('resize', handleResize);
+  window.addEventListener('load', handleResize);
+  handleResize();
+
+  /* ---------- GLOW TRAIL ---------- */
+  const colors = ['#ff0040','#ff7b00','#ffe600','#2bff00','#00ffc8','#00aaff','#8f00ff'];
+  let colorIndex = 0;
+
+  window.addEventListener('mousemove', e => {
+    const dot = document.createElement('div');
+    dot.className = 'ribbon-dot';
+    dot.style.background = colors[colorIndex];
+    colorIndex = (colorIndex + 1) % colors.length;
+    dot.style.left = (e.clientX - 16) + 'px';
+    dot.style.top  = (e.clientY - 16) + 'px';
+    document.body.appendChild(dot);
+    setTimeout(() => dot.remove(), 800);
+  });
+
+  /* ---------- CUSTOM CURSOR ---------- */
+  const cursor = document.getElementById('cursorAnim');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top  = e.clientY + 'px';
+  });
+
+  /* ---------- IMAGE SWAPS ---------- */
+  const originals = {};
+
+  function swap(id, file) {
+    const img = document.getElementById(id);
+    if (!img) return;
+    if (!originals[id]) originals[id] = img.src;
+    img.src = 'images/' + file;
+  }
+
+  function restoreAll() {
+    for (const id in originals) {
+      const img = document.getElementById(id);
+      if (img) img.src = originals[id];
+    }
+  }
+
+  // Single Swaps
+  [['slice20','slice20h.webp'],['slice11','slice11h.webp'],['slice32','slice32h.webp'],['slice40','slice40h.webp']]
+  .forEach(([id,file]) => {
+    const img = document.getElementById(id);
+    if(img){
+      img.addEventListener('mouseenter', () => { restoreAll(); swap(id,file); });
+      img.addEventListener('mouseleave', restoreAll);
+    }
+  });
+
+  // Group Swaps
+  const groups = {
+    slice6:  { slice12:'slice12h.webp', slice18:'slice18m.webp', slice19:'slice19m.webp', slice24:'slice24m.webp' },
+    slice7:  { slice13:'slice13h.webp', slice18:'slice18g.webp', slice19:'slice19g.webp', slice24:'slice24g.webp' },
+    slice8:  { slice14:'slice14h.webp', slice18:'slice18b.webp', slice19:'slice19b.webp', slice24:'slice24b.webp' },
+    slice9:  { slice15:'slice15h.webp', slice18:'slice18a.webp', slice19:'slice19a.webp', slice24:'slice24a.webp' }
+  };
+  // Aliasing trigger IDs (slice 12 acts like slice 6, etc.)
+  groups.slice12 = groups.slice6; groups.slice13 = groups.slice7; 
+  groups.slice14 = groups.slice8; groups.slice15 = groups.slice9;
+
+  Object.keys(groups).forEach(triggerId => {
+    const trigger = document.getElementById(triggerId);
+    if(trigger){
+      trigger.addEventListener('mouseenter', () => {
+        restoreAll();
+        const set = groups[triggerId];
+        for (const id in set) swap(id, set[id]);
+      });
+      trigger.addEventListener('mouseleave', restoreAll);
+    }
+  });
+
+  /* ---------- NAVIGATION ---------- */
+  function go(url) { window.location.href = url; }
+  
+  const clickMap = {
+    slice6: () => go('pages/music.html'), slice12: () => go('pages/music.html'),
+    slice7: () => go('pages/games.html'), slice13: () => go('pages/games.html'),
+    slice8: () => go('pages/books.html'), slice14: () => go('pages/books.html'),
+    slice9: () => go('pages/about.html'), slice15: () => go('pages/about.html'),
+    slice40: () => window.location.href = 'mailto:croxroc@gmail.com'
+  };
+
+  Object.keys(clickMap).forEach(id => {
+    const img = document.getElementById(id);
+    if (img) {
+      img.style.cursor = 'pointer';
+      img.addEventListener('mousedown', e => {
+        e.preventDefault();
+        clickMap[id]();
+      });
+    }
+  });
+
+  /* ==== MOBILE TAP HANDLING ==== */
+  const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  const tapState = {};
+
+  function enableTap(id, action) {
+    const img = document.getElementById(id);
+    if (!img || !isTouch) return;
+
+    img.addEventListener('touchstart', e => {
+      e.preventDefault();
+      if (!tapState[id]) {
+        // Trigger hover effect/group swap logic on first tap
+        const event = new MouseEvent('mouseenter');
+        img.dispatchEvent(event);
+        
+        tapState[id] = true;
+        setTimeout(() => tapState[id] = false, 900);
+      } else {
+        // Double tap triggers the link
+        tapState[id] = false;
+        action();
+      }
+    }, { passive:false });
+  }
+
+  // Hooking up mobile taps to the same clickMap
+  Object.keys(clickMap).forEach(id => enableTap(id, clickMap[id]));
+
+window.addEventListener('load', () => {
+  // Wait a moment after the page is 'ready' so we don't block the first view
+  setTimeout(() => {
+    const imagesToPreload = Object.values(hoverMap); // Get all hover image paths
+    
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      // Ensure the path matches your folder structure (e.g., 'images/' or '../images/pagesimages/')
+      img.src = src.includes('/') ? src : '../images/' + src;
+    });
+    console.log("Hover images preloaded in background.");
+  }, 2000); // 2-second delay
+});
+
+</script>
+</body>
+</html>

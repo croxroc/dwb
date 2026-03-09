@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="Author" content="Patrick John Evans">
+<meta name="Copyright" content="croxroc copyright from 2018, ownership of trademark 2022 and website content from concept 2018, to Patrick John Evans">
+<title>About the croxroc Crew at Deep Water Bend</title>
+<meta name="Description" content="Meet CJ the Crocodile and the rest of the Croxroc crew at Deep Water Bend.">
+
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100dvh; margin: 0; padding: 0; background: #000;
+    overflow: hidden; cursor: none; display: flex;
+    justify-content: center; align-items: center;
+  }
+
+  .stage {
+    position: relative; width: 1880px; height: 1060px;
+    background: #000; transform-origin: center center;
+    flex-shrink: 0; image-rendering: crisp-edges; overflow: hidden;
+  }
+
+  /* --- LAYOUT FIXES --- */
+  .row, .hrow { display: flex; flex-wrap: nowrap; }
+  .row img + img, .hrow img + img { margin-left: -1px; }
+  .middle { margin-top: -1px; display: flex; height: 825px; }
+  .final-row { margin-top: -1px; height: 62px; }
+  .col img + img { margin-top: -1px; }
+  img { display: block; user-select: none; -webkit-user-drag: none; }
+
+  .top-row { height: 173px; }
+  .col-1 { width: 114px; }
+  .col-3 { width: 419px; }
+
+  /* --- CONTENT AREA --- */
+  .slice-10 {
+    width: 1347px; height: 758px; position: relative;
+    background-image: url("../images/pagesimages/slice10.webp");
+    background-size: cover; overflow: hidden;
+  }
+
+  .slice-10-scroll {
+    position: absolute; inset: 0; z-index: 10;
+    overflow-y: auto; padding: 40px 60px;
+  }
+
+  .layout { display: grid; grid-template-columns: 55% 45%; gap: 20px; color: #fff; }
+  .rail-container { display: flex; flex-direction: column; align-items: center; }
+  .rail { 
+    display: flex; gap: 20px; overflow-x: auto; width: 100%; padding: 10px 0; 
+    scroll-snap-type: x mandatory; scrollbar-width: none;
+  }
+  .rail::-webkit-scrollbar { display: none; }
+  
+  .character {
+    flex-shrink: 0; width: 180px; height: 240px; scroll-snap-align: start;
+    border-radius: 16px; background: rgba(255, 255, 255, 0.1);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: transform 0.3s, border 0.3s;
+  }
+  .character.active { transform: scale(1.05); border: 3px solid #00d2ff; }
+  .character img { max-width: 85%; max-height: 85%; border-radius: 8px; }
+
+  .arrows { display: flex; gap: 20px; margin: 10px 0; }
+  .arrow { 
+    width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.5rem;
+  }
+
+  .video-placeholder { width: 100%; height: 300px; background: #000; border-radius: 16px; overflow: hidden; margin-top: 10px; }
+  .video-placeholder video { width: 100%; height: 100%; object-fit: cover; }
+
+  .details { padding: 20px; background: rgba(255,255,255,0.05); border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); }
+  .storybook-container img { width: 100%; height: auto; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+
+  /* --- CURSOR --- */
+  .custom-cursor {
+    position: fixed; width: 96px; height: 96px;
+    background: url("../images/icons/dusty.webp") no-repeat center / contain;
+    pointer-events: none; z-index: 999999; transform: translate(-50%, -50%);
+  }
+  .trail {
+    position: fixed; width: 40px; height: 40px; border-radius: 50%;
+    pointer-events: none; z-index: 999998; mix-blend-mode: screen;
+    filter: blur(4px); animation: fadeOut 0.8s forwards;
+  }
+  @keyframes fadeOut { to { opacity: 0; transform: scale(2); } }
+  
+  .visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+</style>
+</head>
+<body>
+
+<div class="custom-cursor" id="cursorAnim"></div>
+
+<div class="stage" id="mainStage">
+  <div class="row top-row">
+    <img src="../images/pagesimages/slice1.webp" width="114" height="173">
+    <img id="slice2" src="../images/pagesimages/slice2.webp" width="167" height="173">
+    <img id="slice3" src="../images/pagesimages/slice3.webp" width="167" height="173">
+    <img id="slice4" src="../images/pagesimages/slice4.webp" width="168" height="173">
+    <img id="slice5" src="../images/pagesimages/slice5a.webp" width="167" height="173">
+    <img src="../images/pagesimages/slice6.webp" width="438" height="173">
+    <img src="../images/pagesimages/slice7a.webp" width="659" height="173">
+  </div>
+
+  <div class="middle">
+    <div class="col col-1">
+      <img src="../images/pagesimages/slice8.webp" width="114" height="758">
+      <img id="slice9" src="../images/pagesimages/slice9.webp" width="114" height="67">
+    </div>
+
+    <div class="slice-10">
+      <div class="slice-10-scroll">
+          <h1 style="color:#00d2ff; margin-bottom: 20px; font-family: sans-serif;">Meet the Crew</h1>
+          <div class="layout">
+            
+            <div class="rail-container">
+              <div class="rail" id="rail">
+                <div class="character active" data-id="0"><img src="../images/c1.png"></div>
+                <div class="character" data-id="1"><img src="../images/c2.png"></div>
+                <div class="character" data-id="2"><img src="../images/c3.png"></div>
+                <div class="character" data-id="3"><img src="../images/c4.png"></div>
+                <div class="character" data-id="4"><img src="../images/c5.png"></div>
+                <div class="character" data-id="5"><img src="../images/c6.png"></div>
+                <div class="character" data-id="6"><img src="../images/c7.png"></div>
+                <div class="character" data-id="7"><img src="../images/c8.png"></div>
+                <div class="character" data-id="8"><img src="../images/c9.png"></div>
+                <div class="character" data-id="9"><img src="../images/c10.png"></div>
+              </div>
+              <div class="arrows">
+                <div class="arrow" id="leftArrow">&#8592;</div>
+                <div class="arrow" id="rightArrow">&#8594;</div>
+              </div>
+              <div class="video-placeholder">
+                <video id="charVideo" src="../videos/1.mp4" muted controls></video>
+              </div>
+            </div>
+
+            <div class="details">
+                <h2 id="charName" class="visually-hidden">Crocodile Junior</h2>
+                <div class="storybook-container">
+                    <img id="charStoryImage" src="../images/about/cj-about.webp" alt="Character Story">
+                </div>
+                <div id="charBioSEO" class="visually-hidden">
+                    Crocodile Junior, also known as CJ, is a brave young Australian Saltwater Crocodile living in Deep Water Bend. He loves drumming and exploring with his friends.
+                </div>
+            </div>
+
+          </div>
+      </div>
+    </div>
+
+    <div class="col col-3">
+      <img src="../images/pagesimages/slice11a.webp" width="419" height="405">
+      <div class="hrow">
+        <img src="../images/pagesimages/slice12a.webp" width="150" height="356">
+        <img id="slice13" src="../images/pagesimages/slice13a.webp" width="191" height="356">
+        <img src="../images/pagesimages/slice14a.webp" width="78" height="356">
+      </div>
+      <div class="hrow">
+        <img id="slice15" src="../images/pagesimages/slice15a.webp" width="150" height="64">
+        <img src="../images/pagesimages/slice16a.webp" width="191" height="64">
+        <img src="../images/pagesimages/slice17a.webp" width="78" height="64">
+      </div>
+    </div>
+  </div>
+
+  <div class="row final-row">
+    <img src="../images/pagesimages/slice18a.webp" width="114" height="62">
+    <img src="../images/pagesimages/slice19a.webp" width="1347" height="62">
+    <img src="../images/pagesimages/slice20a.webp" width="150" height="62">
+    <img src="../images/pagesimages/slice21a.webp" width="191" height="62">
+    <img src="../images/pagesimages/slice22a.webp" width="78" height="62">
+  </div>
+</div>
+
+<script>
+/* ---------- 1. AUTO-SCALING ---------- */
+const stage = document.getElementById('mainStage');
+const baseWidth = 1880, baseHeight = 1060;
+
+function handleResize() {
+  const scale = Math.min(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+  stage.style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', handleResize);
+window.addEventListener('load', handleResize);
+handleResize();
+
+/* ---------- 2. CURSOR & TRAIL ---------- */
+const cursor = document.getElementById('cursorAnim');
+const colors = ['#ff0040','#ff7b00','#ffe600','#2bff00','#00ffc8','#00aaff','#8f00ff'];
+let colorIndex = 0;
+
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+  const dot = document.createElement('div');
+  dot.className = 'trail';
+  dot.style.background = colors[colorIndex];
+  colorIndex = (colorIndex + 1) % colors.length;
+  dot.style.left = (e.clientX - 20) + 'px';
+  dot.style.top  = (e.clientY - 20) + 'px';
+  document.body.appendChild(dot);
+  setTimeout(() => dot.remove(), 800);
+});
+
+/* ---------- 3. TOP NAV HOVERS & LINKS ---------- */
+const originals = {};
+const hoverMap = { slice2:'slice2h.webp', slice3:'slice3h.webp', slice4:'slice4h.webp', slice5:'slice5ah.webp', slice9:'slice9h.webp', slice13:'slice13ah.webp', slice15:'slice15ah.webp' };
+const navMap = { slice2:'music.html', slice3:'games.html', slice4:'books.html', slice5:'about.html', slice9:'../index.html', slice15:'mailto:croxroc@gmail.com' };
+
+Object.keys(hoverMap).forEach(id => {
+  const el = document.getElementById(id);
+  if(!el) return;
+  originals[id] = el.src;
+  el.addEventListener('mouseenter', () => el.src = '../images/pagesimages/' + hoverMap[id]);
+  el.addEventListener('mouseleave', () => el.src = originals[id]);
+  if(navMap[id]) {
+    el.style.cursor = 'pointer';
+    el.addEventListener('mousedown', () => window.location.href = navMap[id]);
+  }
+});
+
+/* ---------- 4. CHARACTER DATA & SWAPPING ---------- */
+const characters = [
+  { name: "Crocodile Junior", bio: "CJ is a young, adventurous Saltwater Crocodile who loves the drums.", video: "../videos/1.mp4", storyImg: "../images/about/cj-about.webp" },
+  { name: "Bubbles", bio: "Bubbles loves to swim and play with her friends in the bend.", video: "../videos/2.mp4", storyImg: "../images/about/bubbles-about.webp" },
+  { name: "Bebee", bio: "Bebee is the fastest swimmer in the crew.", video: "../videos/3.mp4", storyImg: "../images/about/bebee-about.webp" },
+  { name: "Red", bio: "Red is known for his bright scales and big heart.", video: "../videos/4.mp4", storyImg: "../images/about/red-about.webp" },
+  { name: "Bullion", bio: "Bullion is always looking for hidden treasures.", video: "../videos/5.mp4", storyImg: "../images/about/bullion-about.webp" },
+  { name: "Marshall", bio: "Marshall is the unofficial leader of the Deep Water Bend crew.", video: "../videos/6.mp4", storyImg: "../images/about/marshall-about.webp" },
+  { name: "Dusty", bio: "Dusty loves a good joke and making everyone laugh.", video: "../videos/7.mp4", storyImg: "../images/about/dusty-about.webp" },
+  { name: "Thunda", bio: "Thunda is the loudest of the bunch—but the friendliest!", video: "../videos/8.mp4", storyImg: "../images/about/thunda-about.webp" },
+  { name: "Pacey", bio: "Pacey loves to explore the jungle trails.", video: "../videos/9.mp4", storyImg: "../images/about/pacey-about.webp" },
+  { name: "Newman", bio: "Newman is the newest member of the croxroc crew.", video: "../videos/10.mp4", storyImg: "../images/about/newman-about.webp" }
+];
+
+const rail = document.getElementById('rail');
+const charVideo = document.getElementById('charVideo');
+const charName = document.getElementById('charName');
+const charBioSEO = document.getElementById('charBioSEO');
+const charStoryImage = document.getElementById('charStoryImage');
+const tiles = document.querySelectorAll('.character');
+
+tiles.forEach(tile => {
+  tile.addEventListener('click', () => {
+    const id = tile.dataset.id;
+    const data = characters[id];
+    
+    // Update active state
+    tiles.forEach(t => t.classList.remove('active'));
+    tile.classList.add('active');
+    
+    // Update Page Content
+    charName.textContent = data.name;
+    charBioSEO.textContent = data.bio;
+    charStoryImage.src = data.storyImg;
+    charStoryImage.alt = data.name + " story page";
+    
+    charVideo.src = data.video;
+    charVideo.play();
+
+    // Scroll tile into center
+    tile.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+  });
+});
+
+/* ---------- 5. RAIL NAVIGATION ---------- */
+document.getElementById('leftArrow').onclick = () => rail.scrollBy({ left: -200, behavior: 'smooth' });
+document.getElementById('rightArrow').onclick = () => rail.scrollBy({ left: 200, behavior: 'smooth' });
+
+</script>
+</body>
+</html>

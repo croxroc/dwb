@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="Author" content="Patrick John Evans">
+<meta name="Copyright" content="croxroc copyright from 2018, ownership of trademark 2022 and website content from concept 2018, to Patrick John Evans">
+
+<title>Let's play some GAMES!</title>
+<meta name="Description" content="This page provides kids games that they can play for hours.">
+
+<meta property="og:title" content="Let's play some GAMES!" />
+<meta property="og:description" content="Popular games found at Deep water Bend, play them now! (not strictly for kids, Mum and Dad can play them too!)" />
+<meta property="og:image" content="https://croxroc.com/images/social-share-preview.jpg" />
+
+
+<style>
+  * { box-sizing: border-box; }
+  
+  html, body {
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+    cursor: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* --- STAGE: Auto-Scaling Container --- */
+  .stage {
+    position: relative;
+    width: 1880px;
+    height: 1060px; /* Matches total slice height: 173 + 825 + 62 */
+    background: #000;
+    transform-origin: center center;
+    flex-shrink: 0;
+    image-rendering: crisp-edges;
+    overflow: hidden;
+  }
+
+  /* --- GAP FIXES --- */
+  .row, .hrow { display: flex; flex-wrap: nowrap; }
+  .row img + img, .hrow img + img { margin-left: -1px; }
+  .middle { margin-top: -1px; display: flex; height: 825px; }
+  .final-row { margin-top: -1px; height: 62px; }
+  .col img + img { margin-top: -1px; }
+
+  /* Stretch fix for top-right image to stay flush */
+  .top-row img:last-child { flex-grow: 1; width: auto; object-fit: cover; }
+
+  img {
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    vertical-align: middle;
+  }
+
+  /* --- LAYOUT PIECES --- */
+  .top-row { height: 173px; }
+  .col-1 { width: 114px; }
+  .col-3 { width: 419px; }
+
+  /* === SLICE 10 BACKGROUND SLOT === */
+  .slice-10 {
+    width: 1347px;
+    height: 758px;
+    position: relative;
+    flex-shrink: 0;
+    background-image: url("../images/pagesimages/slice10.webp");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  /* === GAME GRID === */
+  .game-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    grid-template-rows: repeat(2, 1fr);    
+    gap: 20px;
+    padding: 40px;
+    width: 100%;
+    height: 100%;
+    position: relative; 
+    z-index: 10;
+  }
+
+  .game-card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .game-card:hover {
+    transform: scale(1.03);
+    border-color: #fff;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+  }
+
+  .game-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  /* === OVERLAY === */
+  #gameOverlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: black; z-index: 99999; display: none; flex-direction: column;
+  }
+  #gameFrame { width: 100%; height: 100%; border: none; background: black; }
+  .close-btn {
+    position: absolute; top: 30px; right: 30px; width: 60px; height: 60px;
+    background: red; border: 3px solid white; border-radius: 50%;
+    color: white; font-size: 30px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    z-index: 100000;
+  }
+
+  /* === CUSTOM CURSOR & TRAIL === */
+  .custom-cursor {
+    position: fixed; width: 96px; height: 96px;
+    background: url("../images/icons/dusty.webp") no-repeat center / contain;
+    pointer-events: none; z-index: 999999; transform: translate(-50%, -50%);
+  }
+  .trail {
+    position: fixed; width: 40px; height: 40px; border-radius: 50%;
+    pointer-events: none; z-index: 999998; mix-blend-mode: screen;
+    filter: blur(4px); animation: fadeOut 0.8s forwards;
+  }
+  @keyframes fadeOut { to { opacity: 0; transform: scale(2); } }
+</style>
+</head>
+
+<body>
+
+<div class="custom-cursor" id="cursorAnim"></div>
+
+<div id="gameOverlay">
+  <div class="close-btn" onclick="closeGame()">X</div>
+  <iframe id="gameFrame" src=""></iframe>
+</div>
+
+<div class="stage" id="mainStage">
+
+  <div class="row top-row">
+    <img src="../images/pagesimages/slice1.webp" width="114" height="173">
+    <img id="slice2" src="../images/pagesimages/slice2.webp" fetchpriority="high" width="167" height="173">
+    <img id="slice3" src="../images/pagesimages/slice3g.webp" fetchpriority="high" width="167" height="173">
+    <img id="slice4" src="../images/pagesimages/slice4.webp" fetchpriority="high" width="168" height="173">
+    <img id="slice5" src="../images/pagesimages/slice5.webp" fetchpriority="high" width="167" height="173">
+    <img src="../images/pagesimages/slice6.webp" loading="lazy" width="438" height="173">
+    <img src="../images/pagesimages/slice7g.webp" loading="lazy" width="659" height="173">
+  </div>
+
+  <div class="middle">
+    <div class="col col-1">
+      <img src="../images/pagesimages/slice8.webp" loading="lazy" width="114" height="758">
+      <img id="slice9" src="../images/pagesimages/slice9.webp" loading="lazy" width="114" height="67">
+    </div>
+
+    <div class="slice-10">
+	<h1 style="color:#00d2ff; margin: 20px 0 0 30px; font-family: sans-serif;">Let's Play a Game!</h1>
+      <div class="game-grid">
+        <div class="game-card" onclick="playGame('../games/bubbles.html')">
+          <img src="../images/game1.webp" loading="lazy" alt="Bubbles">
+        </div>
+        <div class="game-card" onclick="playGame('../games/fireworks.html')">
+          <img src="../images/game2.webp" loading="lazy" alt="Fireworks">
+        </div>
+        <div class="game-card" onclick="playGame('../games/magicwand.html')">
+          <img src="../images/game3.webp" loading="lazy" alt="Magic Wand">
+        </div>
+        <div class="game-card" onclick="playGame('../games/spot.html')">
+          <img src="../images/game4.webp" loading="lazy" alt="Spot Splat">
+        </div>
+        <div class="game-card" onclick="playGame('../games/memory.html')">
+          <img src="../images/game5.webp" loading="lazy" alt="Memory">
+        </div>
+        <div class="game-card" onclick="playGame('../colouring/index.html')">
+          <img src="../images/game6.webp" loading="lazy" alt="Colouring In">
+        </div>
+      </div>
+    </div>
+
+    <div class="col col-3">
+      <img src="../images/pagesimages/slice11g.webp" loading="lazy" width="419" height="405">
+      <div class="hrow">
+        <img src="../images/pagesimages/slice12g.webp" loading="lazy" width="150" height="356">
+        <img id="slice13" src="../images/pagesimages/slice13g.webp" loading="lazy" width="191" height="356">
+        <img src="../images/pagesimages/slice14g.webp" loading="lazy" width="78" height="356">
+      </div>
+      <div class="hrow">
+        <img id="slice15" src="../images/pagesimages/slice15g.webp" loading="lazy" width="150" height="64">
+        <img src="../images/pagesimages/slice16g.webp" loading="lazy" width="191" height="64">
+        <img src="../images/pagesimages/slice17g.webp" loading="lazy" width="78" height="64">
+      </div>
+    </div>
+  </div>
+
+  <div class="row final-row">
+    <img src="../images/pagesimages/slice18g.webp" loading="lazy" width="114" height="62">
+    <img src="../images/pagesimages/slice19g.webp" loading="lazy" width="1347" height="62">
+    <img src="../images/pagesimages/slice20g.webp" loading="lazy" width="150" height="62">
+    <img src="../images/pagesimages/slice21g.webp" loading="lazy" width="191" height="62">
+    <img src="../images/pagesimages/slice22g.webp" loading="lazy" width="78" height="62">
+  </div>
+</div>
+
+<script>
+/* ---------- AUTO-SCALING ---------- */
+const stage = document.getElementById('mainStage');
+const baseWidth = 1880, baseHeight = 1060;
+
+function handleResize() {
+  const scale = Math.min(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+  stage.style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', handleResize);
+window.addEventListener('load', handleResize);
+handleResize();
+
+/* ---------- GAME LOGIC ---------- */
+const overlay = document.getElementById('gameOverlay');
+const iframe = document.getElementById('gameFrame');
+
+function playGame(url) {
+  iframe.src = url;
+  overlay.style.display = 'flex';
+}
+
+function closeGame() {
+  iframe.src = ''; 
+  overlay.style.display = 'none';
+}
+
+/* ---------- CURSOR & TRAIL (RAINBOW GLOW) ---------- */
+const cursor = document.getElementById('cursorAnim');
+const colors = ['#ff0040','#ff7b00','#ffe600','#2bff00','#00ffc8','#00aaff','#8f00ff'];
+let colorIndex = 0;
+
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+
+  const dot = document.createElement('div');
+  dot.className = 'trail';
+  dot.style.background = colors[colorIndex];
+  colorIndex = (colorIndex + 1) % colors.length;
+  dot.style.left = (e.clientX - 20) + 'px';
+  dot.style.top  = (e.clientY - 20) + 'px';
+  document.body.appendChild(dot);
+  setTimeout(() => dot.remove(), 800);
+});
+
+/* ---------- IMAGE SWAPS & NAV ---------- */
+const originals = {};
+
+function swap(id, file) {
+  const img = document.getElementById(id);
+  if (!img) return;
+  if (!originals[id]) originals[id] = img.src;
+  img.src = '../images/pagesimages/' + file;
+}
+
+function restore(id) {
+  if (originals[id]) document.getElementById(id).src = originals[id];
+}
+
+const hoverMap = {
+  slice2: 'slice2h.webp', slice3: 'slice3gh.webp',
+  slice4: 'slice4h.webp', slice5: 'slice5h.webp',
+  slice9: 'slice9h.webp', slice13: 'slice13gh.webp', 
+  slice15: 'slice15gh.webp'
+};
+
+Object.keys(hoverMap).forEach(id => {
+  const img = document.getElementById(id);
+  if (!img) return;
+  img.addEventListener('mouseenter', () => swap(id, hoverMap[id]));
+  img.addEventListener('mouseleave', () => restore(id));
+});
+
+const navMap = {
+  slice2: 'music.html', slice3: 'games.html', 
+  slice4: 'books.html', slice5: 'about.html',
+  slice9: '../index.html', slice15: 'mailto:croxroc@gmail.com'
+};
+
+Object.keys(navMap).forEach(id => {
+  const img = document.getElementById(id);
+  if (!img) return;
+  img.style.cursor = 'pointer';
+  img.addEventListener('mousedown', () => {
+    window.location.href = navMap[id];
+  });
+});
+
+/* ==== MOBILE TAP HANDLING ==== */
+const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+const tapState = {};
+
+Object.keys(navMap).forEach(id => {
+  const img = document.getElementById(id);
+  if (!img || !isTouch) return;
+  
+  img.addEventListener('touchstart', e => {
+    e.preventDefault();
+    if (!tapState[id]) {
+      if (hoverMap[id]) swap(id, hoverMap[id]);
+      tapState[id] = true;
+      setTimeout(() => tapState[id] = false, 900);
+    } else {
+      tapState[id] = false;
+      window.location.href = navMap[id];
+    }
+  }, { passive:false });
+});
+
+window.addEventListener('load', () => {
+  // Wait a moment after the page is 'ready' so we don't block the first view
+  setTimeout(() => {
+    const imagesToPreload = Object.values(hoverMap); // Get all hover image paths
+    
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      // Ensure the path matches your folder structure (e.g., 'images/' or '../images/pagesimages/')
+      img.src = src.includes('/') ? src : '../images/pagesimages/' + src;
+    });
+    console.log("Hover images preloaded in background.");
+  }, 2000); // 2-second delay
+});
+
+</script>
+</body>
+</html>

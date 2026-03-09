@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="Author" content="Patrick John Evans">
+<meta name="Copyright" content="croxroc copyright from 2018, ownership of trademark 2022 and website content from concept 2018, to Patrick John Evans">
+
+<title>All the croxroc Music!</title>
+<meta name="Description" content="There is 72 tracks on 4 albums that are streaming on all music platforms, you can listen to samples on this page and click on the links provided to be taken to that track on that streaming platform.">
+
+<meta property="og:title" content="All the croxroc Music!" />
+<meta property="og:description" content="Listen to all the music that is the tunes of croxroc. You can even listen to any crew member singing Happy Birthday to your child." />
+<meta property="og:image" content="https://croxroc.com/images/social-share-preview.jpg" />
+
+
+<style>
+  * { box-sizing: border-box; }
+  
+  html, body {
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+    cursor: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* --- STAGE: Auto-Scaling Container --- */
+  .stage {
+    position: relative;
+    width: 1880px;
+    height: 1060px; /* Matches total slice height: 173 + 825 + 62 */
+    background: #000;
+    transform-origin: center center;
+    flex-shrink: 0;
+    image-rendering: crisp-edges;
+    overflow: hidden;
+  }
+
+  /* --- GAP FIXES --- */
+  .row, .hrow { display: flex; flex-wrap: nowrap; }
+  .row img + img, .hrow img + img { margin-left: -1px; }
+  .middle { margin-top: -1px; display: flex; height: 825px; }
+  .final-row { margin-top: -1px; height: 62px; }
+  .col img + img { margin-top: -1px; }
+
+  /* Stretch fix for top-right image */
+  .top-row img:last-child { flex-grow: 1; width: auto; object-fit: cover; }
+
+  img {
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* --- LAYOUT PIECES --- */
+  .top-row { height: 173px; }
+  .col-1 { width: 114px; }
+  .col-3 { width: 419px; }
+
+  /* === SLICE 10 (MUSIC AREA) === */
+  .slice-10 {
+    width: 1347px;
+    height: 758px;
+    position: relative;
+    flex-shrink: 0;
+    background-image: url("../images/pagesimages/slice10.webp");
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+  }
+
+  .slice-scroll {
+    position: absolute;
+    inset: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-top: 40px;
+    padding-bottom: 100px;
+    z-index: 50;
+    scrollbar-width: thin;
+  }
+
+  .slice-scroll::-webkit-scrollbar { width: 8px; }
+  .slice-scroll::-webkit-scrollbar-track { background: transparent; }
+  .slice-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+
+  /* === CAROUSEL STYLES === */
+  #album-container { width: 100%; display: flex; flex-direction: column; gap: 80px; align-items: center; }
+  .album-wrapper { position: relative; width: 100%; max-width: 900px; height: 320px; display: flex; flex-direction: column; align-items: center; }
+  .album-title { color: #fff; font-size: 28px; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 20px; text-shadow: 0 2px 10px #000; }
+  .scene { position: relative; width: 100%; height: 240px; perspective: 1000px; display: flex; justify-content: center; align-items: center; pointer-events: none; }
+  .carousel { position: relative; width: 160px; height: 200px; transform-style: preserve-3d; transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+  .tile { 
+    position: absolute; width: 160px; height: 200px; border-radius: 18px; background: #1b1b22; 
+    transform-style: preserve-3d; box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    transition: opacity 0.6s, box-shadow 0.3s, transform 0.6s; pointer-events: auto !important; overflow: hidden;
+  }
+  .tile.playing { border: 2px solid #fff; box-shadow: 0 0 30px hsla(var(--hue, 0), 80%, 60%, 0.8); z-index: 1000 !important; }
+  .tile-content { position: absolute; inset: 0; display: flex; flex-direction: column; background: #111; }
+  .tile-content .image { width: 100%; height: 120px; position: relative; }
+  .tile-content .image img { width: 100%; height: 100%; object-fit: cover; }
+  .tile-content .title { margin-top: 15px; text-align: center; font-size: 11px; color: #ccc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 8px; }
+
+  .play {
+    position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%);
+    width: 44px; height: 44px; border-radius: 50%; background: rgba(0,0,0,0.9); border: 2px solid #fff;
+    color: #fff; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1000;
+  }
+  .play:hover { background: #ff0055; transform: translateX(-50%) scale(1.1); }
+
+  .icons { margin-top: auto; padding-bottom: 10px; display: flex; justify-content: space-evenly; }
+  .icon-link img { width: 22px; height: 22px; opacity: 0.6; transition: 0.2s; }
+  .icon-link:hover img { opacity: 1; transform: scale(1.2); }
+
+  .nav-btn {
+    position: absolute; top: 60%; transform: translateY(-50%); width: 60px; height: 60px;
+    background: rgba(0,0,0,0.8); border: 1px solid rgba(255,255,255,0.3); border-radius: 50%;
+    color: white; font-size: 30px; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; z-index: 100; transition: 0.2s; user-select: none;
+  }
+  .nav-btn:hover { background: #ff0055; border-color: #fff; }
+  .prev-btn { left: 0px; }
+  .next-btn { right: 0px; }
+
+  /* === CUSTOM CURSOR & TRAIL === */
+  .custom-cursor {
+    position: fixed; width: 96px; height: 96px;
+    background: url("../images/icons/dusty.webp") no-repeat center / contain;
+    pointer-events: none; z-index: 999999; transform: translate(-50%, -50%);
+  }
+  .trail {
+    position: fixed; width: 40px; height: 40px; border-radius: 50%;
+    pointer-events: none; z-index: 999998; mix-blend-mode: screen;
+    filter: blur(4px); animation: fadeOut 0.8s forwards;
+  }
+  @keyframes fadeOut { to { opacity: 0; transform: scale(2); } }
+  
+  .album-wrapper {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 320px; /* Helps the browser guess the height before loading */
+}
+
+
+</style>
+</head>
+<body>
+
+<div class="custom-cursor" id="cursorAnim"></div>
+
+<div class="stage" id="mainStage">
+  <div class="row top-row">
+    <img src="../images/pagesimages/slice1.webp" width="114" height="173">
+    <img id="slice2" src="../images/pagesimages/slice2m.webp" fetchpriority="high" width="167" height="173">
+    <img id="slice3" src="../images/pagesimages/slice3.webp" fetchpriority="high" width="167" height="173">
+    <img id="slice4" src="../images/pagesimages/slice4.webp" fetchpriority="high" width="168" height="173">
+    <img id="slice5" src="../images/pagesimages/slice5.webp" fetchpriority="high" width="167" height="173">
+    <img src="../images/pagesimages/slice6.webp" loading="lazy" width="438" height="173">
+    <img src="../images/pagesimages/slice7m.webp" loading="lazy" width="659" height="173">
+  </div>
+
+  <div class="middle">
+    <div class="col col-1">	
+      <img src="../images/pagesimages/slice8.webp" loading="lazy" width="114" height="758">
+      <img id="slice9" src="../images/pagesimages/slice9.webp" loading="lazy" width="114" height="67">
+    </div>
+
+    <div class="slice-10">
+      <div class="slice-scroll">
+	  <h1 style="color:#00d2ff; margin: 0px 0 0 0px; font-family: sans-serif; ">Our 4 Music Albums</h1>
+        <div id="album-container">
+		</div>
+      </div>
+    </div>
+
+    <div class="col col-3">
+      <img src="../images/pagesimages/slice11m.webp" loading="lazy" width="419" height="405">
+      <div class="hrow">
+        <img src="../images/pagesimages/slice12m.webp" loading="lazy" width="150" height="356">
+        <img id="slice13" src="../images/pagesimages/slice13m.webp" loading="lazy" width="191" height="356">
+        <img src="../images/pagesimages/slice14m.webp" loading="lazy" width="78" height="356">
+      </div>
+      <div class="hrow">
+        <img id="slice15" src="../images/pagesimages/slice15m.webp" loading="lazy" width="150" height="64">
+        <img src="../images/pagesimages/slice16m.webp" loading="lazy" width="191" height="64">
+        <img src="../images/pagesimages/slice17m.webp" loading="lazy" width="78" height="64">
+      </div>
+    </div>
+  </div>
+
+  <div class="row final-row">
+    <img src="../images/pagesimages/slice18.webp" loading="lazy" width="114" height="62">
+    <img src="../images/pagesimages/slice19.webp" loading="lazy" width="1347" height="62">
+    <img src="../images/pagesimages/slice20m.webp" loading="lazy" width="150" height="62">
+    <img src="../images/pagesimages/slice21m.webp" loading="lazy" width="191" height="62">
+    <img src="../images/pagesimages/slice22a.webp" loading="lazy" width="78" height="62">
+  </div>
+</div>
+
+<script>
+/* ---------- AUTO-SCALING ---------- */
+const stage = document.getElementById('mainStage');
+const baseWidth = 1880, baseHeight = 1060;
+
+function handleResize() {
+  const scale = Math.min(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+  stage.style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', handleResize);
+window.addEventListener('load', handleResize);
+handleResize();
+
+/* ---------- CURSOR & TRAIL ---------- */
+const cursor = document.getElementById('cursorAnim');
+const colors = ['#ff0040','#ff7b00','#ffe600','#2bff00','#00ffc8','#00aaff','#8f00ff'];
+let colorIndex = 0;
+
+document.addEventListener('mousemove', e => {
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+  const dot = document.createElement('div');
+  dot.className = 'trail';
+  dot.style.background = colors[colorIndex];
+  colorIndex = (colorIndex + 1) % colors.length;
+  dot.style.left = (e.clientX - 20) + 'px';
+  dot.style.top  = (e.clientY - 20) + 'px';
+  document.body.appendChild(dot);
+  setTimeout(() => dot.remove(), 800);
+});
+
+/* ---------- IMAGE SWAPS & NAV ---------- */
+const originals = {};
+function swap(id, file) {
+  const img = document.getElementById(id);
+  if (!img) return;
+  if (!originals[id]) originals[id] = img.src;
+  img.src = '../images/pagesimages/' + file;
+}
+function restore(id) {
+  if (originals[id]) document.getElementById(id).src = originals[id];
+}
+
+const hoverMap = {
+  slice2: 'slice2mh.webp', slice3: 'slice3h.webp',
+  slice4: 'slice4h.webp', slice5: 'slice5h.webp',
+  slice9: 'slice9h.webp', slice13: 'slice13mh.webp', 
+  slice15: 'slice15mh.webp'
+};
+
+Object.keys(hoverMap).forEach(id => {
+  const img = document.getElementById(id);
+  if (!img) return;
+  img.addEventListener('mouseenter', () => swap(id, hoverMap[id]));
+  img.addEventListener('mouseleave', () => restore(id));
+});
+
+const navMap = {
+  slice2: 'music.html', slice3: 'games.html', 
+  slice4: 'books.html', slice5: 'about.html',
+  slice9: '../index.html', slice15: 'mailto:croxroc@gmail.com'
+};
+
+Object.keys(navMap).forEach(id => {
+  const img = document.getElementById(id);
+  if (!img) return;
+  img.style.cursor = 'pointer';
+  img.addEventListener('mousedown', () => { window.location.href = navMap[id]; });
+});
+
+/* ---------- MUSIC DATA & LOGIC ---------- */
+const trackData = [
+  // WELCOME TO DEEP WATER BEND
+  { title: "CJ’s School Day", links: { youtube: "https://music.youtube.com/watch?v=DeeZYJU5Y10", amazon: "https://music.amazon.com.au/albums/B0DK9VXHY6?marketplaceId=A15PK738MTQHSO&musicTerritory=AU&ref=dm_sh_JpeZgCifCDdJSm6ObGDsPHL8j&trackAsin=B0DK9Y3J4L", apple: "https://music.apple.com/us/song/cjs-school-day/1774784961", spotify: "https://open.spotify.com/track/6Ios83YbZEmNYFpmRrrTGH?si=6911f204ff3b4d35" } },
+  { title: "Wanna Be My Friend", links: { youtube: "https://music.youtube.com/watch?v=q6B95Q7dGhU", amazon: "https://music.amazon.com.au/albums/B0DK9VXHY6?marketplaceId=A15PK738MTQHSO&musicTerritory=AU&ref=dm_sh_F2URmTEhoLmCEuKhzeQGIx9Vl&trackAsin=B0DK9XDC9Y", apple: "https://music.apple.com/us/song/wanna-be-my-friend/1774784965", spotify: "https://open.spotify.com/track/4k4vVmHM0VNwX7ReY1StP8?si=b78bd447da424cd6" } },
+  { title: "Count to Ten", links: { youtube: "https://music.youtube.com/watch?v=7a_-n92JT2A", amazon: "https://music.amazon.com.au/albums/B0DK9VXHY6?marketplaceId=A15PK738MTQHSO&musicTerritory=AU&ref=dm_sh_ndLVMq6TXxVMFj1l9xYiLFsRl&trackAsin=B0DK9Y728C", apple: "https://music.apple.com/us/song/count-to-ten/1774784966", spotify: "https://open.spotify.com/track/3v1r8cgAFobcmCFA7NJAk2?si=c86404a6c1304182" } },
+  { title: "The English Alphabet", links: { youtube: "https://music.youtube.com/watch?v=rqTzBjHGLDc", amazon: "https://music.amazon.com.au/albums/B0DK9VXHY6?marketplaceId=A15PK738MTQHSO&musicTerritory=AU&ref=dm_sh_45orxU1RdU98f7JRV2Twy9YCj&trackAsin=B0DK9WR8HX", apple: "https://music.apple.com/us/song/the-english-alphabet/1774784967", spotify: "https://open.spotify.com/track/3WV65gyQ8QQhecuWqCkuHc?si=7ae42d736eaa4d15" } },
+  { title: "Punch Balloon (Original)", links: { youtube: "https://music.youtube.com/watch?v=lh1cZXnvqAQ", amazon: "https://music.amazon.com.au/albums/B0DK9VXHY6?marketplaceId=A15PK738MTQHSO&musicTerritory=AU&ref=dm_sh_LZVaNRpLDOX1bxvmCwlsp1KUP&trackAsin=B0DK9Y4BC9", apple: "https://music.apple.com/us/song/punch-balloon/1774784968", spotify: "https://open.spotify.com/track/0NycZgTatZL6MnDrDef4z4?si=377c190be4eb40b2" } },
+  { title: "Croxroc Theme", links: { youtube: "https://music.youtube.com/watch?v=iOTWTVSgfM0", amazon: "https://music.amazon.com.au/albums/B0DK9VXHY6?marketplaceId=A15PK738MTQHSO&musicTerritory=AU&ref=dm_sh_MPCv9d1uKkdZ5QuMGRLmt2dMp&trackAsin=B0DK9VQL7D", apple: "https://music.apple.com/us/song/croxroc-theme/1774784969", spotify: "https://open.spotify.com/track/28alPNp16alpHnikg3bhKe?si=87daf2e66b124058" } },
+  { title: "HB from Croxroc Crew", links: { youtube: "https://music.youtube.com/watch?v=A1EFL81Kafg", amazon: "https://music.amazon.com.au/albums/B0DK9VXHY6?marketplaceId=A15PK738MTQHSO&musicTerritory=AU&ref=dm_sh_rMc7hM1LOUv2h0ijt8kgL5B2C&trackAsin=B0DK9XRHZ2", apple: "https://music.apple.com/us/song/happy-birthday-from-croxroc/1774784970", spotify: "https://open.spotify.com/track/6kAgiBvK3tiqUOSNqc2jWQ?si=5593ad7fea554232" } },
+  { title: "Santa Is My Shining Knight", links: { youtube: "https://music.youtube.com/watch?v=4LhmLAEUV2w", amazon: "https://music.amazon.com.au/albums/B0DK9VXHY6?marketplaceId=A15PK738MTQHSO&musicTerritory=AU&ref=dm_sh_Jwv6qmcASBWfBf6hGWLOR88LK&trackAsin=B0DK9YXM5C", apple: "https://music.apple.com/us/song/santa-is-my-shining-knight/1774784971", spotify: "https://open.spotify.com/track/1JttqrgNfs13JPDGgQoh8K?si=d9508bfd34ae4611" } },
+
+  // FEEL THE JOY
+  { title: "Spaghetti Cuddles", links: { youtube: "https://music.youtube.com/watch?v=cTlYd-Xylbc", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ4SQH5", apple: "https://music.apple.com/us/song/spaghetti-cuddles/1823322896", spotify: "https://open.spotify.com/track/6PfN9sFHYcJbXr6hVd1AZN" } },
+  { title: "Are We There Yet?", links: { youtube: "https://music.youtube.com/watch?v=UHWGNXh_fT4", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJC11CX", apple: "https://music.apple.com/us/song/are-we-there-yet/1823322897", spotify: "https://open.spotify.com/track/4RMx1AgiJQ0d6s9RLuOkx7" } },
+  { title: "Baby Talk", links: { youtube: "https://music.youtube.com/watch?v=C7MpxMunD5s", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJJQ9K4", apple: "https://music.apple.com/us/song/babys-first-uttered-song-baby-talk/1823322898", spotify: "https://open.spotify.com/track/0qz7fO7rXvkm2r2xC2v7kF" } },
+  { title: "Baby Talk (English)", links: { youtube: "https://music.youtube.com/watch?v=5PlIxnw_T3Y", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJDV784", apple: "https://music.apple.com/us/song/babys-first-uttered-song-english-translation/1823322899", spotify: "https://open.spotify.com/track/3kXv5vRr8JnM3o93f2U6kp" } },
+  { title: "Brick in a Blanket", links: { youtube: "https://music.youtube.com/watch?v=Qo5W9VAfygA", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJK9DP3", apple: "https://music.apple.com/us/song/brick-in-a-blanket/1823322900", spotify: "https://open.spotify.com/track/6YwqZr0s2dTq6c1OzNEXVQ" } },
+  { title: "You Can Do It", links: { youtube: "https://music.youtube.com/watch?v=kR6csd_Pmz8", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ53V12", apple: "https://music.apple.com/us/song/you-can-do-it/1823322901", spotify: "https://open.spotify.com/track/2HwZfbDq2TfYFJ3Sm6V6io" } },
+  { title: "Hurry Up!", links: { youtube: "https://music.youtube.com/watch?v=3NrCUiSxuPs", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJQDBDK", apple: "https://music.apple.com/us/song/hurry-up/1823322902", spotify: "https://open.spotify.com/track/1bHd8nz3Kt8nRZzKkeS8iP" } },
+  { title: "Dream Adventure", links: { youtube: "https://music.youtube.com/watch?v=5363DDF3U6k", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ9QWQ7", apple: "https://music.apple.com/us/song/dream-adventure-dusty-and-me/1823322903", spotify: "https://open.spotify.com/track/4A6v1v9pDS8pYPvDwjD8Gx" } },
+  { title: "Mr. Mrs. Miss. Rider", links: { youtube: "https://music.youtube.com/watch?v=Sw7hFYEnX8A", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJC57S9", apple: "https://music.apple.com/us/song/mr-mrs-miss-rider/1823322905", spotify: "https://open.spotify.com/track/2Mxa0qZ6V4o5RExRkdAz5H" } },
+  { title: "The Fastest Race", links: { youtube: "https://music.youtube.com/watch?v=8tkdllo8r0A", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ4D2ZW", apple: "https://music.apple.com/us/song/the-fastest-race-of-all-time/1823322906", spotify: "https://open.spotify.com/track/0rkJzq1KHzHbI0l4kEj6yJ" } },
+  { title: "I Love My House", links: { youtube: "https://music.youtube.com/watch?v=SDMcm9lc9lA", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJH95Z7", apple: "https://music.apple.com/us/song/i-love-my-house-i-love-my-home/1823322907", spotify: "https://open.spotify.com/track/7iRdm0jNdYOu71f2c8AeKR?si=937e9027cf3b442f" } },
+  { title: "Snowflakes", links: { youtube: "https://music.youtube.com/watch?v=fGYKXmx1EIA", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ452P7", apple: "https://music.apple.com/us/song/snowflakes/1823322908", spotify: "https://open.spotify.com/track/1ekF2edWZkt3YM40bxHWQW?si=cf4f23a0aec4497f" } },
+  { title: "Who Am I?", links: { youtube: "https://music.youtube.com/watch?v=XmY2jjUAKFA", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJY36H7", apple: "https://music.apple.com/us/song/who-am-i/1823322909", spotify: "https://open.spotify.com/track/10o1qBB4PdZMSwS5W1UJzQ?si=818e674f86744556" } },
+  { title: "Sand Galore", links: { youtube: "https://music.youtube.com/watch?v=S3xxw_33wAE", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJJP7W3", apple: "https://music.apple.com/us/song/sand-galore-water-for-all/1823322910", spotify: "https://open.spotify.com/track/3CNrG7sqOWQlt3GCFurEuu?si=097da7a60a464acb" } },
+  { title: "This Is That Song!", links: { youtube: "https://music.youtube.com/watch?v=nPJttjUJ9OA", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ54LBB", apple: "https://music.apple.com/us/song/this-is-that-song/1823322911", spotify: "https://open.spotify.com/track/7bOab5ucKTwk2NB3CyTstE?si=a6d5fbbdebb64c7c" } },
+  { title: "Bebee’s School Day", links: { youtube: "https://music.youtube.com/watch?v=jg6WISWmjUc", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ57DF9", apple: "https://music.apple.com/us/song/bebees-school-day/1823322912", spotify: "https://open.spotify.com/track/009kw6X8PvBIUWiAXWa6US?si=d41ed8ee07e64152" } },
+  { title: "Bebee’s Punch Balloon", links: { youtube: "https://music.youtube.com/watch?v=7rLBOYbXH3M", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ218GW", apple: "https://music.apple.com/us/song/bebees-punch-balloon/1823322913", spotify: "https://open.spotify.com/track/5wn9WNtZ2LJvDCmG9MpIyz?si=0c208a926c9740d5" } },
+  { title: "HB from CJ", links: { youtube: "https://music.youtube.com/watch?v=eZwP2Khhrlo", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFHY474C", apple: "https://music.apple.com/us/song/happy-birthday-from-cj/1823322914", spotify: "https://open.spotify.com/track/0kauPwikf1tx85I93Of3Jt?si=4ac1073113874d08" } },
+  { title: "HB from Bullion", links: { youtube: "https://music.youtube.com/watch?v=6YFEAGpbjL0", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJ54WVH", apple: "https://music.apple.com/us/song/happy-birthday-from-bullion-bulli/1823322916", spotify: "https://open.spotify.com/track/0hvqTqs9EEJAD9BVGRe4h3?si=78a5f079e6ec491b" } },
+  { title: "HB from Bubz", links: { youtube: "https://music.youtube.com/watch?v=6YFEAGpbjL0", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJH95Z4", apple: "https://music.apple.com/us/song/happy-birthday-from-bubz/1823322917", spotify: "https://open.spotify.com/track/7qKG6DdjkPiNxiIY23X2Om?si=b6e6df1064a64be3" } },
+  { title: "HB from Dusty", links: { youtube: "https://music.youtube.com/watch?v=kEhWQBKnjho", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJJV94P", apple: "https://music.apple.com/us/song/happy-birthday-from-dusty/1823322918", spotify: "https://open.spotify.com/track/2UonkrLwirwRQUmfWBOkTQ?si=18a7a4c5c4fb4ef3" } },
+  { title: "HB from Bebee", links: { youtube: "https://music.youtube.com/watch?v=kEhWQBKnjho", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJPNQRL", apple: "https://music.apple.com/us/song/happy-birthday-from-bebee/1823323159", spotify: "https://open.spotify.com/track/6GefM5owsNHo4ozbmEkgta?si=d68cdeb913d44371" } },
+  { title: "HB from Marshall", links: { youtube: "https://music.youtube.com/watch?v=CEDHEKP2a1A", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJHJK31", apple: "https://music.apple.com/us/song/happy-birthday-from-marshall-big-m/1823323160", spotify: "https://open.spotify.com/track/252HSvNMOJM78GJRTkpDYj?si=e8663c4d882f479a" } },
+  { title: "HB from Red", links: { youtube: "https://music.youtube.com/watch?v=tfAHunjMuYk", amazon: "https://music.amazon.com.au/albums/B0FFJMXGK1?trackAsin=B0FFJJ2V5H", apple: "https://music.apple.com/us/song/happy-birthday-from-red/1823323161", spotify: "https://open.spotify.com/track/2AlunGwAlUeCOthQ0x1Go3?si=0ca0220118f54a90" } },
+
+  // FEEL THE MUSIC SHARE THE JOY
+  { title: "Dance Like You", links: { youtube: "https://music.youtube.com/watch?v=d1zC7xPJtuE", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLGDMQPN", apple: "https://music.apple.com/us/song/dance-like-you/1832830567", spotify: "https://open.spotify.com/track/1hi9RuDHfrFKTs1wNHa8qk?si=6a6b7dd12b3e4e6e  " } },
+  { title: "Chasing Birds", links: { youtube: "https://music.youtube.com/watch?v=hIwi14H6yvM", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFZ8RDK", apple: "https://music.apple.com/us/song/chasing-birds/1832830778", spotify: "https://open.spotify.com/track/2ZZwnJEG1E3XocZPbhcfbR?si=df727909c12d4037  " } },
+  { title: "Old Trains", links: { youtube: "https://music.youtube.com/watch?v=_hOKtQqZ3uA", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFWPWBN", apple: "https://music.apple.com/us/song/old-trains/1832830779", spotify: "https://open.spotify.com/track/1hcETI0yiewTAt6dToBpAd?si=2443fa9298b34d72  " } },
+  { title: "My Blanket", links: { youtube: "https://music.youtube.com/watch?v=QWp-A6pIGlQ", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFHCR4G", apple: "https://music.apple.com/us/song/my-blanket-around-the-world/1832830780", spotify: "https://open.spotify.com/track/7oSTRghCvY7CUO6W37SSeh?si=d9cd28333e7245e7  " } },
+  { title: "Hide and Shriek", links: { youtube: "https://music.youtube.com/watch?v=RekxtfHNVdc", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLG2XTWL", apple: "https://music.apple.com/us/song/hide-and-shriek/1832830781", spotify: "https://open.spotify.com/track/6jAaNdcfMWXz34ZQMPnhR9?si=6cdbcea70ec54917  " } },
+  { title: "I Look Fantastic", links: { youtube: "https://music.youtube.com/watch?v=qlDnc81yPW0", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLG5YQNC", apple: "https://music.apple.com/us/song/i-look-fantastic/1832830783", spotify: "https://open.spotify.com/track/48CMH8g8WTiB6iyNAv7uB1?si=ffd12eec2f474c72  " } },
+  { title: "The Po Po", links: { youtube: "https://music.youtube.com/watch?v=PBWr-XMHeVo", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLG351FZ", apple: "https://music.apple.com/us/song/nothings-cooler-than-the-po-po/1832830784", spotify: "https://open.spotify.com/track/1hJJ0ygFGQfxiXSqi7PDLL?si=d15d46a42e8f4837  " } },
+  { title: "It’s Family Night", links: { youtube: "https://music.youtube.com/watch?v=boNCgSAuC_8", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLGDJGJG", apple: "https://music.apple.com/us/song/its-family-night/1832830786", spotify: "https://open.spotify.com/track/691lgIsJ2ndjOiDlNWVcyC?si=8d3df0d1684a4958  " } },
+  { title: "Just to Fly", links: { youtube: "https://music.youtube.com/watch?v=f-yJSpg4X1k", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFHCR4F", apple: "https://music.apple.com/us/song/just-to-fly/1832830787", spotify: "https://open.spotify.com/track/7aStC139wipc4AFf8LRfnE?si=d46c4e0145904a0b  " } },
+  { title: "Shopping Cart", links: { youtube: "https://music.youtube.com/watch?v=J7_sUP8JrMI", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLGB3717", apple: "https://music.apple.com/us/song/shopping-cart/1832830788", spotify: "https://open.spotify.com/track/0kcpgbkaib1Dcd9W8xmGKx?si=0ddee26bdf2747ec  " } },
+  { title: "Cubby House", links: { youtube: "https://music.youtube.com/watch?v=wqNs12Ti-OQ", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLGDL118", apple: "https://music.apple.com/us/song/cubby-house/1832830789", spotify: "https://open.spotify.com/track/0sOUQsS0RRG6yvqIOa6oXK?si=4e76788c89ad4a38  " } },
+  { title: "Race Driver", links: { youtube: "https://music.youtube.com/watch?v=tlyfebb3MnE", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFJTT5V", apple: "https://music.apple.com/us/song/race-driver/1832830791", spotify: "https://open.spotify.com/track/0Qp7EEmJgbuJLZrixXHr0G?si=78319f3d4b5542f0  " } },
+  { title: "Going to the Park", links: { youtube: "https://music.youtube.com/watch?v=Y7VlrQ5VzJw", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFHCW42", apple: "https://music.apple.com/us/song/going-to-the-park/1832830793", spotify: "https://open.spotify.com/track/5pTRX9Xaj93ncq1oUay13X?si=4e956dbc28af4207  " } },
+  { title: "I Know a Game", links: { youtube: "https://music.youtube.com/watch?v=s3uX_EcnIdo", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLG8FZ9W", apple: "https://music.apple.com/us/song/i-know-a-game/1832830794", spotify: "https://open.spotify.com/track/0vbw0AEVARYl50sCrj2rdM?si=bcbf1de019424be4  " } },
+  { title: "Breakfast", links: { youtube: "https://music.youtube.com/watch?v=YV8u_chi_fI", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFZ44B8", apple: "https://music.apple.com/us/song/breakfast/1832830795", spotify: "https://open.spotify.com/track/5lJa7PLYFqXF2EYlOHDO3m?si=7f539c4c29be40d0  " } },
+  { title: "Warrior Girl", links: { youtube: "https://music.youtube.com/watch?v=lB8WHzyuXxA", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLG9HX18", apple: "https://music.apple.com/us/song/warrior-girl/1832830796", spotify: "https://open.spotify.com/track/3DCxzu2SgXioIKIsvBE89h?si=742b303d3c364ff3  " } },
+  { title: "Best Me", links: { youtube: "https://music.youtube.com/watch?v=0krSGLncxpc", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLG9Y1S5", apple: "https://music.apple.com/us/song/best-me/1832830797", spotify: "https://open.spotify.com/track/3dwuJHwVlIs3cP3WXSe13I?si=24dfdf31632b4ade  " } },
+  { title: "Big Sister", links: { youtube: "https://music.youtube.com/watch?v=dbT9h3DD-6E", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLGB1R4J", apple: "https://music.apple.com/us/song/big-sister/1832830798", spotify: "https://open.spotify.com/track/5I6bD5rvKED78ShcFqmmg7?si=4d3d589fd971438d  " } },
+  { title: "Swim Class", links: { youtube: "https://music.youtube.com/watch?v=2T4zOWD_f5c", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFZ5W6X", apple: "https://music.apple.com/us/song/little-ones-swim-class/1832830799", spotify: "https://open.spotify.com/track/5oW4AW39k4d1EblwMcA0bx?si=460714db87c34486  " } },
+  { title: "Bath Time", links: { youtube: "https://music.youtube.com/watch?v=e_nVbtieGOk", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLG9MDHP", apple: "https://music.apple.com/us/song/bath-time/1832830800", spotify: "https://open.spotify.com/track/6A48oiPkLPR6zBn9lgIOKc?si=5a2f43c6f942461b  " } },
+  { title: "All Grown Up", links: { youtube: "https://music.youtube.com/watch?v=CPBfwmJqjf4", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFG5GR1", apple: "https://music.apple.com/us/song/all-grown-up/1832830801", spotify: "https://open.spotify.com/track/66SvjewcTtZ9xXvYw3owBE?si=66109a2ea891422c  " } },
+  { title: "Like Christmas", links: { youtube: "https://music.youtube.com/watch?v=WJe_6MRuF_g", amazon: "https://music.amazon.com.au/albums/B0FLGMTD8L?trackAsin=B0FLFHKMCZ", apple: "https://music.apple.com/us/song/something-like-christmas/1832830802", spotify: "https://open.spotify.com/track/1kodFk7MeWKVXRxBiljqz6?si=a6f95fc650ca4e0f  " } },
+
+  // ONE BIG DANCE
+  { title: "Step-Tember", links: { youtube: "https://music.youtube.com/watch?v=GoAdOUQd1Cs", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQYCDNLB", apple: "https://music.apple.com/us/song/step-tember-dance/1839637021", spotify: "https://open.spotify.com/track/4bUhdHEu3u9lfd8S4itKOe?si=e0fa49d412b642e4  " } },
+  { title: "HB Little One", links: { youtube: "https://music.youtube.com/watch?v=Wx38AalNVjU", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQYKX4BP", apple: "https://music.apple.com/us/song/happy-birthday-little-one/1839637024", spotify: "https://open.spotify.com/track/7JHuf9xV0lPwV251Z4g60d?si=199c68ae75b84e79  " } },
+  { title: "HB Beautiful Girl", links: { youtube: "https://music.youtube.com/watch?v=g1E9ZNsgZ_I", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY5F7KP", apple: "https://music.apple.com/us/song/happy-birthday-my-beautiful-girl/1839637026", spotify: "https://open.spotify.com/track/391bpBrME19I5MXvD4p9ep?si=7894139e19644b6b  " } },
+  { title: "The Birthday Boy", links: { youtube: "https://music.youtube.com/watch?v=-x1xxmTFsnM", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQXXRWQY", apple: "https://music.apple.com/us/song/the-birthday-boy/1839637027", spotify: "https://open.spotify.com/track/7q2TjKgDVqrScPchxrw5vw?si=4476c6157b324172  " } },
+  { title: "Brush My Teef", links: { youtube: "https://music.youtube.com/watch?v=qtvxEp5Lbgk", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY9ZWLW", apple: "https://music.apple.com/us/song/brush-my-teef/1839637028", spotify: "https://open.spotify.com/track/64NZql4NBOTjmwxvM7CC4a?si=ae1126e2ab4c4eed  " } },
+  { title: "I Turned 8 Today", links: { youtube: "https://music.youtube.com/watch?v=4lFyWI7r43w", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY9ZWLW", apple: "https://music.apple.com/us/song/i-turned-8-today/1839638111", spotify: "https://open.spotify.com/track/3i0AfvUoVGZcMK0kl61urb?si=d56260b836ef45ce  " } },
+  { title: "That's My Week", links: { youtube: "https://music.youtube.com/watch?v=FcNvojNcoMk", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQXSPXFH", apple: "https://music.apple.com/us/song/thats-my-week/1839638114", spotify: "https://open.spotify.com/track/1VAEocBjXek3yBCY900NTW?si=e3d01bc5e56d4d8a  " } },
+  { title: "Boogie & Dance", links: { youtube: "https://music.youtube.com/watch?v=tjVIgLz0jAI", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY6BV45", apple: "https://music.apple.com/us/song/boogie-woogie-and-dance/1839638115", spotify: "https://open.spotify.com/track/6nUsO3USpdhXhczj8f2aOn?si=536b1913544940f2  " } },
+  { title: "Crocodile Shuffle", links: { youtube: "https://music.youtube.com/watch?v=migwmZ8bXoc", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY9YGNR", apple: "https://music.apple.com/us/song/crocodile-shuffle/1839638116", spotify: "https://open.spotify.com/track/2ZO4eUraf5E71aGAADf33x?si=d80e84ac47cc4dca  " } },
+  { title: "Jumping Spider", links: { youtube: "https://music.youtube.com/watch?v=js2dSSfHn8o", amazon: "https://amazon.com/music/player/tracks/B0FQY59RRY?marketplaceId=ATVPDKIKX0DER&musicTerritory=US&ref=dm_sh_dPUyUm7zxLEcT4pTpjKMdKlg7", apple: "https://music.apple.com/us/song/jumping-spider/1839638117", spotify: "https://open.spotify.com/track/6IVNUk2SadjVWhdgUvHt82?si=590899c099754bad  " } },
+  { title: "Outback Tracker", links: { youtube: "https://music.youtube.com/watch?v=g3VgThCzvfA", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQYG7YFQ", apple: "https://music.apple.com/us/song/outback-tracker/1839638118", spotify: "https://open.spotify.com/track/0LZEVpakutbaKGiEpvIGOK?si=45bda55c24ce4bc4  " } },
+  { title: "Gift to Mum", links: { youtube: "https://music.youtube.com/watch?v=XcmyDCkMJe0", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQYGXCVL", apple: "https://music.apple.com/us/song/a-gift-of-song-to-mum/1839638119", spotify: "https://open.spotify.com/track/0FuHtjWek6c4df13k5ulte?si=27b594db41b14130  " } },
+  { title: "Thanks Dad", links: { youtube: "https://music.youtube.com/watch?v=UlQ6PT3G3lk", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY6BW3F", apple: "https://music.apple.com/us/song/thanks-for-being-my-dad/1839638120", spotify: "https://open.spotify.com/track/2F63MsxmRCDKb1jlSgDtiP?si=796cee5537b24c20  " } },
+  { title: "Time to Play", links: { youtube: "https://music.youtube.com/watch?v=a_NyEtseKTw", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY27D7D", apple: "https://music.apple.com/us/song/time-to-play/1839638121", spotify: "https://open.spotify.com/track/2qYn7Z1L5vt0w8a1ICcQaV?si=b096ae6bc34c4dfd  " } },
+  { title: "Breakdancing", links: { youtube: "https://music.youtube.com/watch?v=ryoQc8O-_v8", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQYDP9TG", apple: "https://music.apple.com/us/song/breakdancing/1839638122", spotify: "https://open.spotify.com/track/5oX0n583YaBreKiI6iLKPX?si=dd1e1c1a14d44d87  " } },
+  { title: "Pizza with Nan", links: { youtube: "https://music.youtube.com/watch?v=Lpv_22PAXDA", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY4QN4M", apple: "https://music.apple.com/us/song/making-pizza-with-my-nan/1839638123", spotify: "https://open.spotify.com/track/4yiWI4pDMTQHXK2CugtHFs?si=c8b4530e0ccd42fd  " } },
+  { title: "One Big Dance", links: { youtube: "https://music.youtube.com/watch?v=3sfbID-xaqM", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY9Y2D7", apple: "https://music.apple.com/us/song/one-big-dance/1839638124", spotify: "https://open.spotify.com/track/1x6PDeWyGw7d1CPFVuS9Wa?si=37359b1b13a04a73  " } },
+  { title: "Smiles", links: { youtube: "https://music.youtube.com/watch?v=l7UI5OGBJB0", amazon: "https://music.amazon.com.au/albums/B0FQXVHD2P?trackAsin=B0FQY9YKYY", apple: "https://music.apple.com/us/song/smiles/1839638125", spotify: "https://open.spotify.com/track/3Gda2UfJCsxHbCsFi94xWF?si=284e6bcc99b54b23  " } }
+];
+
+const albumsConfig = [
+    { title: "Welcome to Deep Water Bend - 8 tracks", tracks: 8, hue: 120 },
+    { title: "Feel the Joy - 24 tracks", tracks: 24, hue: 200 },
+    { title: "Feel the Music, Share the Joy - 22 tracks", tracks: 22, hue: 280 },
+    { title: "One Big Dance - 18 tracks", tracks: 18, hue: 30 }
+];
+
+const albumContainer = document.getElementById("album-container");
+let currentAudio = null;
+let currentTile = null;
+let trackCounter = 1;
+
+albumsConfig.forEach(album => {
+  const wrapper = document.createElement("div");
+  wrapper.className = "album-wrapper";
+  wrapper.innerHTML = `
+    <h2 class="album-title">${album.title}</h2>
+    <div class="nav-btn prev-btn">‹</div>
+    <div class="nav-btn next-btn">›</div>
+    <div class="scene"><div class="carousel"></div></div>
+  `;
+  
+  const carousel = wrapper.querySelector(".carousel");
+  const tiles = [];
+  
+  for (let i = 0; i < album.tracks; i++) {
+    const data = trackData[trackCounter - 1] || { title: "Track " + trackCounter, links: {} };
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.style.setProperty("--hue", album.hue);
+    tile.innerHTML = `
+      <div class="tile-content">
+        <div class="image">
+          <img src="../images/track-art/${trackCounter}.jpg" onerror="this.src='../images/track-art/default.jpg'">
+          <button class="play">▶</button>
+        </div>
+        <div class="title">${data.title}</div>
+        <div class="icons">
+          <a href="${data.links.apple || '#'}" target="_blank" class="icon-link"><img src="../images/icons/am.png"></a>
+          <a href="${data.links.spotify || '#'}" target="_blank" class="icon-link"><img src="../images/icons/sm.png"></a>
+          <a href="${data.links.youtube || '#'}" target="_blank" class="icon-link"><img src="../images/icons/yt.png"></a>
+          <a href="${data.links.amazon || '#'}" target="_blank" class="icon-link"><img src="../images/icons/az.png"></a>
+        </div>
+      </div>
+      <audio src="../audio/${trackCounter}.mp3"></audio>
+    `;
+
+    const playBtn = tile.querySelector(".play");
+    const audio = tile.querySelector("audio");
+
+    playBtn.onclick = (e) => {
+      e.stopPropagation();
+      if (currentAudio === audio) {
+        stopAudio();
+      } else {
+        stopAudio();
+        currentAudio = audio;
+        currentTile = tile;
+        tile.classList.add("playing");
+        audio.play().catch(console.error);
+        audio.onended = stopAudio;
+      }
+      render();
+    };
+
+    carousel.appendChild(tile);
+    tiles.push(tile);
+    trackCounter++;
+  }
+
+  let index = 0;
+  const render = () => {
+    tiles.forEach((tile, i) => {
+      let rel = i - index;
+      const total = tiles.length;
+      if (rel > total / 2) rel -= total;
+      if (rel < -total / 2) rel += total;
+
+      const angleStep = 25;
+      const radius = 280;
+      const a = rel * angleStep * Math.PI / 180;
+      const absRel = Math.abs(rel);
+      
+      let baseScale = (rel === 0) ? 1.15 : 0.95;
+      if (tile.classList.contains('playing')) baseScale = 1.3;
+
+      tile.style.transform = `translateX(${radius * Math.sin(a)}px) translateZ(${radius * Math.cos(a) - radius}px) rotateY(${rel * -15}deg) scale(${baseScale})`;
+      tile.style.opacity = absRel > 4 ? 0.2 : (absRel > 2 ? 0.5 : 1);
+      tile.style.zIndex = Math.round(100 - absRel);
+      if (tile.classList.contains('playing')) tile.style.zIndex = 999;
+      tile.style.pointerEvents = absRel > 1 ? 'none' : 'auto';
+    });
+  };
+
+  wrapper.querySelector(".prev-btn").onclick = () => { index--; render(); };
+  wrapper.querySelector(".next-btn").onclick = () => { index++; render(); };
+  render();
+  albumContainer.appendChild(wrapper);
+});
+
+function stopAudio() {
+  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; }
+  if (currentTile) currentTile.classList.remove("playing");
+  currentAudio = null; currentTile = null;
+}
+
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.play') && !e.target.closest('.nav-btn')) {
+    stopAudio();
+    document.querySelectorAll('.tile').forEach(t => t.style.zIndex = t.style.zIndex); 
+  }
+});
+
+window.addEventListener('load', () => {
+  // Wait a moment after the page is 'ready' so we don't block the first view
+  setTimeout(() => {
+    const imagesToPreload = Object.values(hoverMap); // Get all hover image paths
+    
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      // Ensure the path matches your folder structure (e.g., 'images/' or '../images/pagesimages/')
+      img.src = src.includes('/') ? src : '../images/pagesimages/' + src;
+    });
+    console.log("Hover images preloaded in background.");
+  }, 2000); // 2-second delay
+});
+
+</script>
+</body>
+</html>

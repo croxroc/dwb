@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+<meta name="Author" content="Patrick John Evans">
+<meta name="Copyright" content="croxroc copyright from 2018, ownership of trademark 2022 and website content from concept 2018, to Patrick John Evans">
+
+<title>croxroc Book Library!</title>
+<meta name="Description" content="This page provides updated links to new release croxroc books, current purchases can be made on amazon, check the links.">
+
+<meta property="og:title" content="Get your hands on some croxroc Books!" />
+<meta property="og:description" content="You can purchase Books from Amazon currently, new books will be presented here when available.)" />
+<meta property="og:image" content="https://croxroc.com/images/social-share-preview.jpg" />
+
+
+<style>
+  * { box-sizing: border-box; }
+  
+  html, body {
+    height: 100dvh;
+    margin: 0;
+    padding: 0;
+    background: #000;
+    overflow: hidden;
+    cursor: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* --- STAGE: Updated to 1060px height to match your slices --- */
+  .stage {
+    position: relative;
+    width: 1880px;
+    height: 1060px; /* Fixed height to match 173 + 825 + 62 */
+    background: #000;
+    transform-origin: center center;
+    flex-shrink: 0;
+    image-rendering: crisp-edges;
+    overflow: hidden;
+  }
+
+  /* --- IMPROVED GAP FIXES --- */
+  .row, .hrow { display: flex; flex-wrap: nowrap; }
+  
+  /* Overlap images slightly to prevent white lines */
+  .row img + img, .hrow img + img { margin-left: -1px; }
+  
+  /* Vertical overlap for the main sections */
+  .middle { margin-top: -1px; display: flex; height: 825px; }
+  .final-row { margin-top: -1px; height: 62px; }
+
+  /* FIX FOR TOP RIGHT IMAGE: 
+     We let the last image "soak up" any sub-pixel gaps 
+     so it hits the edge of the 1880px stage perfectly. */
+  .top-row img:last-child {
+    flex-grow: 1;
+    width: auto; 
+    object-fit: cover;
+  }
+
+  img {
+    display: block;
+    margin: 0;
+    padding: 0;
+    max-width: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    image-rendering: crisp-edges;
+  }
+
+  /* --- SECTION LAYOUTS --- */
+  .top-row { height: 173px; }
+  .col { display: flex; flex-direction: column; }
+  .col img + img { margin-top: -1px; }
+
+  .col-1 { width: 114px; }
+  .col-3 { width: 419px; }
+
+  /* === SLICE 10 BACKGROUND SLOT === */
+  .slice-10 {
+    width: 1347px;
+    height: 758px;
+    position: relative;
+    flex-shrink: 0;
+    background-image: url("../images/pagesimages/slice10.webp");
+    background-size: cover;
+    background-position: center;
+  }
+
+  /* === BOOK GRID === */
+  .book-grid {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    gap: 15px;
+    padding: 30px;
+    width: 100%;
+    height: 100%;
+    position: relative; 
+    z-index: 10;
+  }
+
+  .book-card {
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    overflow: hidden;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .book-card:hover {
+    transform: scale(1.05);
+    border-color: #00d2ff;
+  }
+
+  .book-title {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    text-align: center;
+    font-family: sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 5px;
+  }
+
+  .book-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* === OVERLAY & CURSOR === */
+  #gameOverlay {
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: black; z-index: 99999; display: none; flex-direction: column;
+  }
+  #gameFrame { width: 100%; height: 100%; border: none; }
+  .close-btn {
+    position: absolute; top: 30px; right: 30px; width: 60px; height: 60px;
+    background: red; border: 3px solid white; border-radius: 50%;
+    color: white; font-size: 30px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+  }
+
+  .custom-cursor {
+    position: fixed; width: 96px; height: 96px;
+    background: url("../images/icons/dusty.webp") no-repeat center / contain;
+    pointer-events: none; z-index: 999999; transform: translate(-50%, -50%);
+  }
+  .trail {
+    position: fixed;
+    width: 40px; /* Matched to index/games */
+    height: 40px;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 999998;
+    mix-blend-mode: screen;
+    filter: blur(4px); /* This creates the "glow" look */
+    animation: fadeOut 0.8s forwards; /* Faster fade to match index */
+  }
+  @keyframes fadeOut { to { opacity: 0; transform: scale(2); } }
+</style>
+</head>
+
+<body>
+
+<div class="custom-cursor" id="cursorAnim"></div>
+
+<div id="gameOverlay">
+  <div class="close-btn" onclick="closeBook()">X</div>
+  <iframe id="gameFrame" src=""></iframe>
+</div>
+
+<div class="stage" id="mainStage">
+
+  <div class="row top-row">
+    <img src="../images/pagesimages/slice1.webp" width="114" height="173">
+    <img id="slice2" src="../images/pagesimages/slice2.webp" fetchpriority="high" width="167" height="173">
+    <img id="slice3" src="../images/pagesimages/slice3.webp" fetchpriority="high" width="167" height="173">
+    <img id="slice4" src="../images/pagesimages/slice4b.webp" fetchpriority="high" width="168" height="173">
+    <img id="slice5" src="../images/pagesimages/slice5.webp" fetchpriority="high" width="167" height="173">
+    <img src="../images/pagesimages/slice6.webp" width="438" height="173">
+    <img src="../images/pagesimages/slice7b.webp" width="659" height="173">
+  </div>
+
+  <div class="middle">
+    <div class="col col-1">
+      <img src="../images/pagesimages/slice8.webp" width="114" height="758">
+      <img id="slice9" src="../images/pagesimages/slice9.webp" width="114" height="67">
+    </div>
+
+    <div class="slice-10">
+	<h1 style="color:#00d2ff; margin: 20px 0 0 30px; font-family: sans-serif;">Our Book Library - (amazon.com)</h1>
+      <div class="book-grid">
+	    <div class="book-card" onclick="window.open('https://www.amazon.com/dp/B0G1FN4B1V', '_blank')"><div class="book-title">Outback Tracker</div><img src="../images/book covers/ot.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+        <div class="book-card" onclick="openBook('#')"><div class="book-title">coming soon</div><img src="../images/book covers/cs.webp" loading="lazy"></div>
+      </div>
+    </div>
+
+    <div class="col col-3">
+      <img src="../images/pagesimages/slice11b.webp" loading="lazy" width="419" height="405">
+      <div class="hrow">
+        <img src="../images/pagesimages/slice12b.webp" loading="lazy" width="150" height="356">
+        <img id="slice13" src="../images/pagesimages/slice13b.webp" loading="lazy" width="191" height="356">
+        <img src="../images/pagesimages/slice14b.webp" loading="lazy" width="78" height="356">
+      </div>
+      <div class="hrow">
+        <img id="slice15" src="../images/pagesimages/slice15b.webp" loading="lazy" width="150" height="64">
+        <img src="../images/pagesimages/slice16b.webp" loading="lazy" width="191" height="64">
+        <img src="../images/pagesimages/slice17b.webp" loading="lazy" width="78" height="64">
+      </div>
+    </div>
+  </div>
+
+  <div class="row final-row">
+    <img src="../images/pagesimages/slice18b.webp" loading="lazy" width="114" height="62">
+    <img src="../images/pagesimages/slice19b.webp" loading="lazy" width="1347" height="62">
+    <img src="../images/pagesimages/slice20b.webp" loading="lazy" width="150" height="62">
+    <img src="../images/pagesimages/slice21b.webp" loading="lazy" width="191" height="62">
+    <img src="../images/pagesimages/slice22b.webp" loading="lazy" width="78" height="62">
+  </div>
+</div>
+
+<script>
+/* ---------- AUTO-SCALING ---------- */
+const stage = document.getElementById('mainStage');
+const baseWidth = 1880, baseHeight = 1060; // Updated to 1060
+
+function handleResize() {
+  const scale = Math.min(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+  stage.style.transform = `scale(${scale})`;
+}
+window.addEventListener('resize', handleResize);
+window.addEventListener('load', handleResize);
+handleResize();
+
+/* ---------- BOOK LOGIC ---------- */
+const overlay = document.getElementById('gameOverlay');
+const iframe = document.getElementById('gameFrame');
+
+function openBook(url) {
+  if(url === '#') return;
+  iframe.src = url;
+  overlay.style.display = 'flex';
+}
+
+function closeBook() {
+  iframe.src = ''; 
+  overlay.style.display = 'none';
+}
+
+/* ---------- CURSOR & TRAIL (MATCHED TO INDEX) ---------- */
+const cursor = document.getElementById('cursorAnim');
+// These are the exact colors from your games/index pages
+const colors = ['#ff0040','#ff7b00','#ffe600','#2bff00','#00ffc8','#00aaff','#8f00ff'];
+let colorIndex = 0;
+
+document.addEventListener('mousemove', e => {
+  // Move main dusty cursor
+  cursor.style.left = e.clientX + 'px';
+  cursor.style.top  = e.clientY + 'px';
+
+  // Create trail dot
+  const dot = document.createElement('div');
+  dot.className = 'trail';
+  
+  // Cycle through the fixed rainbow colors
+  dot.style.background = colors[colorIndex];
+  colorIndex = (colorIndex + 1) % colors.length;
+
+  // Center the trail dot behind the cursor
+  dot.style.left = (e.clientX - 20) + 'px';
+  dot.style.top  = (e.clientY - 20) + 'px';
+  
+  document.body.appendChild(dot);
+  
+  // Remove dot after animation finishes
+  setTimeout(() => dot.remove(), 800);
+});
+
+/* ---------- IMAGE SWAPS & NAV ---------- */
+const originals = {};
+function swap(id, file) {
+  const img = document.getElementById(id);
+  if (!img) return;
+  if (!originals[id]) originals[id] = img.src;
+  img.src = '../images/pagesimages/' + file;
+}
+function restore(id) {
+  if (originals[id]) document.getElementById(id).src = originals[id];
+}
+
+const hoverMap = {
+  slice2: 'slice2h.webp', slice3: 'slice3h.webp',
+  slice4: 'slice4bh.webp', slice5: 'slice5h.webp',
+  slice9: 'slice9h.webp', slice13: 'slice13bh.webp', 
+  slice15: 'slice15bh.webp'
+};
+
+Object.keys(hoverMap).forEach(id => {
+  const img = document.getElementById(id);
+  if (!img) return;
+  img.addEventListener('mouseenter', () => swap(id, hoverMap[id]));
+  img.addEventListener('mouseleave', () => restore(id));
+});
+
+const navMap = {
+  slice2: 'music.html', slice3: 'games.html', 
+  slice4: 'books.html', slice5: 'about.html',
+  slice9: '../index.html', slice15: 'mailto:croxroc@gmail.com'
+};
+
+Object.keys(navMap).forEach(id => {
+  const img = document.getElementById(id);
+  if (!img) return;
+  img.style.cursor = 'pointer';
+  img.addEventListener('mousedown', () => { window.location.href = navMap[id]; });
+});
+
+window.addEventListener('load', () => {
+  // Wait a moment after the page is 'ready' so we don't block the first view
+  setTimeout(() => {
+    const imagesToPreload = Object.values(hoverMap); // Get all hover image paths
+    
+    imagesToPreload.forEach(src => {
+      const img = new Image();
+      // Ensure the path matches your folder structure (e.g., 'images/' or '../images/pagesimages/')
+      img.src = src.includes('/') ? src : '../images/pagesimages/' + src;
+    });
+    console.log("Hover images preloaded in background.");
+  }, 2000); // 2-second delay
+});
+
+</script>
+</body>
+</html>
