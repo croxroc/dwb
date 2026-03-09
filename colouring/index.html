@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Colouring-In Time!</title>
+    <style>
+        html, body {
+            background: #000;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* FIX: Prevents scrollbars */
+            padding: 0;
+            margin: 0;
+            /* FIX: Prevents pinch-zoom on mobile so they can color easily */
+            touch-action: none; 
+        }
+
+        div#gameContainer {
+            background: transparent !important;
+            position: absolute;
+        }
+
+        div#gameContainer canvas {
+            position: absolute;
+            display: block;
+        }
+        
+        /* Pixel Art Settings */
+        div#gameContainer canvas[data-pixel-art="true"] {
+            image-rendering: pixelated;
+        }
+    </style>
+</head>
+
+<body>
+<script src="exported.loader.js"></script>
+
+    <div id="gameContainer">
+        <canvas id="unity-canvas" data-pixel-art=""></canvas>
+        
+        <script>
+            var canvas = document.querySelector("#unity-canvas");
+            var config = {
+                dataUrl: "exported.data",
+                frameworkUrl: "exported.framework.js",
+                codeUrl: "exported.wasm",
+                streamingAssetsUrl: "StreamingAssets",
+                companyName: "croxroc.com",
+                productName: "Colouring-In Time!",
+                productVersion: "1.0",
+            };
+            
+            var scaleToFit;
+            try {
+                scaleToFit = !!JSON.parse("");
+            } catch (e) {
+                scaleToFit = true;
+            }
+
+            function progressHandler(progress) {
+                var percent = progress * 100 + '%';
+                // Loading bar visual
+                canvas.style.background = 'linear-gradient(to right, white, white ' + percent + ', transparent ' + percent + ', transparent) no-repeat center';
+                canvas.style.backgroundSize = '50% 4px'; // Made thinner and centered
+            }
+
+            function onResize() {
+                var container = canvas.parentElement;
+                var w;
+                var h;
+
+                if (scaleToFit) {
+                    w = window.innerWidth;
+                    h = window.innerHeight;
+
+                    // Aspect Ratio: 607 height / 1080 width
+                    var r = 607 / 1080;
+
+                    if (w * r > window.innerHeight) {
+                        w = Math.min(w, Math.ceil(h / r));
+                    }
+                    h = Math.floor(w * r);
+                } else {
+                    w = 1080;
+                    h = 607;
+                }
+
+                container.style.width = canvas.style.width = w + "px";
+                container.style.height = canvas.style.height = h + "px";
+                container.style.top = Math.floor((window.innerHeight - h) / 2) + "px";
+                container.style.left = Math.floor((window.innerWidth - w) / 2) + "px";
+            }
+
+            createUnityInstance(canvas, config, progressHandler).then(function (instance) {
+                canvas = instance.Module.canvas;
+                onResize();
+            });
+
+            window.addEventListener('resize', onResize);
+            onResize();
+        </script>
+    </div>
+</body>
+</html>

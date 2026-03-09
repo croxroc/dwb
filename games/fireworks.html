@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fireworks</title>
+    <style>
+        html, body {
+            background-color: black;
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas { display: block; }
+        
+        #instruction {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.9);
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 22px;
+            font-weight: 300;
+            letter-spacing: 1px;
+            pointer-events: none; /* Allows click to pass through to canvas */
+            user-select: none;
+            transition: opacity 1s ease-out;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 15px 30px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="instruction">Click or Tap for ENDLESS Fireworks!</div>
+    <canvas></canvas>
+    
+    <script>
+        const canvas = document.querySelector('canvas');
+        const c = canvas.getContext('2d');
+        const instruction = document.getElementById('instruction');
+        let firstInteraction = false;
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const mouse = { x: innerWidth / 2, y: innerHeight / 2 };
+        const gravity = 0.03; 
+        const friction = 0.98; 
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        class Particle {
+            constructor(x, y, radius, color, velocity) {
+                this.x = x;
+                this.y = y;
+                this.radius = radius;
+                this.color = color;
+                this.velocity = velocity;
+                this.alpha = 1;
+            }
+
+            draw() {
+                c.save();
+                c.globalAlpha = this.alpha;
+                c.beginPath();
+                c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
+                c.fillStyle = this.color;
+                c.fill();
+                c.closePath();
+                c.restore();
+            }
+
+            update() {
+                this.draw();
+                this.velocity.x *= friction;
+                this.velocity.y *= friction;
+                this.velocity.y += gravity;
+                this.x += this.velocity.x;
+                this.y += this.velocity.y;
+                this.alpha -= 0.008; 
+            }
+        }
+
+        let particles = [];
+
+        function init() {
+            particles = [];
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            c.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            c.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const particle = particles[i];
+                if (particle.alpha > 0) {
+                    particle.update();
+                } else {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+
+        init();
+        animate();
+
+        /* --- INPUT HANDLING --- */
+
+        function createExplosion(x, y) {
+            // Hide instruction on first click
+            if (!firstInteraction) {
+                instruction.style.opacity = '0';
+                firstInteraction = true;
+            }
+
+            const particleCount = 200;
+            const angleIncrement = (Math.PI * 2) / particleCount;
+            const baseHue = Math.random() * 360;
+
+            for (let i = 0; i < particleCount; i++) {
+                const power = Math.random() * 8 + 2; 
+                const angle = angleIncrement * i;
+                
+                particles.push(new Particle(
+                    x, 
+                    y, 
+                    3, 
+                    `hsl(${baseHue}, 50%, 50%)`, 
+                    {
+                        x: Math.cos(angle) * power * Math.random(),
+                        y: Math.sin(angle) * power * Math.random()
+                    }
+                ));
+            }
+        }
+
+        window.addEventListener('mousedown', (event) => {
+            mouse.x = event.clientX;
+            mouse.y = event.clientY;
+            createExplosion(mouse.x, mouse.y);
+        });
+        
+        window.addEventListener('touchstart', (e) => {
+            e.preventDefault(); 
+            const touch = e.touches[0];
+            createExplosion(touch.clientX, touch.clientY);
+        }, {passive: false});
+
+    </script>
+</body>
+</html>
